@@ -1,0 +1,57 @@
+package day1223;
+
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+
+import day1219.DeptDTO;
+import kr.co.sist.dao.MyBatisHandler;
+
+public class TestMyBatisDAO {
+
+	public void insertBoard() {
+		//1.mybatis handler얻기
+		SqlSession ss=MyBatisHandler.getInstance().getMyBatisHandler(true);
+		//2.메소드를 호출
+		int cnt=ss.insert("day1223.nonParameter");
+		//3.결과 받기
+		System.out.println(cnt+"건 추가");
+		if(cnt==1) {
+			ss.commit();
+		}
+		//4.mybatis handler 닫기
+		if(ss != null) {
+			ss.close();
+		}//end if
+	}//insertBoard
+	
+	public void insertCpDept(DeptDTO dDTO) throws PersistenceException{
+		SqlSession ss=MyBatisHandler.getInstance().getMyBatisHandler(true);
+		int cnt=ss.insert("day1223.insertDept",dDTO);
+		System.out.println(cnt+"건 추가");
+		if( ss!=null) {
+			ss.close();
+		}//end if
+		
+	}//insertCpDept
+	public void insertCpDept2(DeptDTO dDTO) throws PersistenceException{
+		SqlSession ss=MyBatisHandler.getInstance().getMyBatisHandler(true);
+		int cnt=ss.insert("day1223.insertDept2",dDTO);
+		System.out.println(cnt+"건 추가");
+		if( ss!=null) {
+			ss.close();
+		}//end if
+		
+	}//insertCpDept
+	
+	public static void main(String[] args) {
+try {
+//		new TestMyBatisDAO().insertBoard();
+	DeptDTO dDTO=new DeptDTO(50, "QA", "경기도");
+		new TestMyBatisDAO().insertCpDept2(dDTO);
+}catch(PersistenceException pe) {	
+	System.err.println("문제발생");
+	pe.printStackTrace();
+}
+	}
+
+}
